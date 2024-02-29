@@ -1,0 +1,24 @@
+﻿using Microsoft.Extensions.Configuration;
+
+namespace AzureOpenAI.Data.BusinessObject
+{
+    public class ConfigurationSettings : IConfigurationSettings
+    {
+        #region Global Variable(s)
+        private readonly IConfiguration _configuration;
+        #endregion
+
+        public ConfigurationSettings(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+        #region Public Prop(s)
+        public string CognitiveServiceName => _configuration["CognitiveSearch:CognitiveServiceName"];
+
+        public string CognitiveServiceIndexName => _configuration["CognitiveSearch:CognitiveServiceIndexName"];
+
+        public string CognitiveServiceApiKey => _configuration["CognitiveSearch:CognitiveServiceApiKey"];
+        #endregion
+
+    }
+}
