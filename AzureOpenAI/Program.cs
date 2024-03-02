@@ -1,5 +1,6 @@
 using AzureOpenAI.Data.BusinessObject;
 using AzureOpenAI.Data.Core;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +12,23 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddTransient<ICognitiveSearchServicesCore, CognitiveSearchServicesCore>()
 .AddTransient<ICognitiveSearchServicesBO, CognitiveSearchServicesBO>()
+.AddTransient<IBlobServiceCore, BlobServiceCore>()
+.AddTransient<IBlobServiceBO, BlobServiceBO>()
 .AddSingleton<IConfigurationSettings, ConfigurationSettings>();
+
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder =>
+        {
+            builder
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -22,6 +39,6 @@ if (app.Environment.IsDevelopment())
 }
 app.MapControllers();
 app.UseHttpsRedirection();
-
+app.UseCors("AllowAllOrigins");
 app.Run();
 
